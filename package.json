@@ -2,7 +2,7 @@
   "name": "nodejs",
   "version": "1.0.0",
   "description": "",
-  "module": "server.js",
+  "module": "index.js",
   "scripts": {
     "test": "jest"
   },
