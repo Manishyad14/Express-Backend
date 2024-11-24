@@ -114,7 +114,7 @@ app.get("/companies", async (req, res) => {
   }
 });
 
-//Exercise 2: Add a New Company
+//Exercise 2: Add a New Company ouyfuiyf
 async function addNewCompany(newCompanyData) {
   let companyRecord = await Company.create(newCompanyData);
   return { newCompany: companyRecord };
