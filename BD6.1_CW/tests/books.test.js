@@ -22,10 +22,9 @@ describe("Books Functions", () => {
     expect(book).toBeUndefined();
   });
 
-
   it("should  add a new book", () => {
-    let newBook = {title : "newBook" , author: "newBook"} ; 
-    let addedBook = addBook(newBook) ; 
+    let newBook = { title: "newBook", author: "newBook" };
+    let addedBook = addBook(newBook);
     expect(addedBook).toEqual({ id: 5, title: "newBook", author: "newBook" });
   });
 });
