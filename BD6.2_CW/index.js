@@ -1,7 +1,7 @@
 const express = require("express");
 const { getAuthors, getAuthorById, addAuthor } = require("./authors.js");
 const app = express();
-const PORT = 3000;
+
 
 app.use(express.json());
 
@@ -24,10 +24,6 @@ app.post("/authors/new", (req, res) => {
   const newAuthor = { authorId: parseInt(authorId), name, book };
   const addedAuthor = addAuthor(newAuthor);
   res.status(201).json(addedAuthor);
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
 });
 
 module.exports = app;

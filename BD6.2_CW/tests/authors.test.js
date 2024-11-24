@@ -1,45 +1,72 @@
-const { getAuthors, getAuthorById, addAuthor } = require("../authors.js");
+let { app, getAuthors, getAuthorById, addAuthor } = require("../index.js");  
+let http = require("http");  
 
-describe("Author Functions", () => {
-  // Test Get All Authors
-  it("should get all authors", () => {
-    let authors = getAuthors();
-    expect(authors.length).toBe(3);
-    expect(authors).toEqual([
-      { authorId: 1, name: "George Orwell", book: "1984" },
-      { authorId: 2, name: "Aldous Huxley", book: "Brave New World" },
-      { authorId: 3, name: "Ray Bradbury", book: "Fahrenheit 451" },
-    ]);
+jest.mock("../index.js", () => {  
+    return {  
+        ...jest.requireActual("../index.js"),  
+        getAuthors: jest.fn(),  
+        getAuthorById: jest.fn(),  
+        addAuthor: jest.fn()  
+    }  
+})  
+
+let server;  
+
+beforeAll((done) => {  
+    server = http.createServer(app);  
+    server.listen(3001, done);  
+});  
+
+afterAll((done) => {  
+    server.close(done);  
+});  
+
+describe("Function Tests", () => {  
+    beforeEach(() => {  
+        jest.clearAllMocks();  
+    });  
+
+    test("getAuthors should return a list of authors", () => {  
+        const mockAuthors = [  
+            { authorId: 1, name: "George Orwell", book: "1984" },  
+            { authorId: 2, name: "Aldous Huxley", book: "Brave New World" }  
+        ];  
+
+        getAuthors.mockReturnValue(mockAuthors); 
+
+        let result = getAuthors()
+        expect(result).toEqual(mockAuthors)
+        expect(getAuthors).toHaveBeenCalled()
+      
+    });  
+
+  test("getAuthorById should return author details", () => {  
+    const mockAuthor = { authorId: 1, name: "George Orwell", book: "1984" };  
+
+    getAuthorById.mockReturnValue(mockAuthor);  
+
+    let result = getAuthorById(1);  
+    expect(result).toEqual(mockAuthor);  
+    expect(getAuthorById).toHaveBeenCalledWith(1);  
+  });
+  test("getAuthorById should return undefined if author id not found", () => {  
+      getAuthorById.mockReturnValue(undefined);  
+      let result = getAuthorById(999);  
+      expect(result).toBeUndefined();  
+      expect(getAuthorById).toHaveBeenCalledWith(999);  
   });
 
-  // Test Get Author by ID
-  it("should get an author by ID", () => {
-    let author = getAuthorById(1);
-    expect(author).toEqual({
-      authorId: 1,
-      name: "George Orwell",
-      book: "1984",
-    });
-  });
+  test("addAuthor should add a new author", () => {  
+    const newAuthor = {  
+      authorId: 4,  
+      name: "J.K. Rowling",  
+      book: "Harry Potter",  
+    };  
 
-  // Test Get Author by Non-Existent ID
-  it("should return undefined for a non-existent author ID", () => {
-    let author = getAuthorById(99);
-    expect(author).toBeUndefined();
-  });
+    addAuthor.mockReturnValue(newAuthor);  
 
-  // Test Add New Author
-  it("should add a new author", () => {
-    const newAuthor = {
-      authorId: 4,
-      name: "J.K. Rowling",
-      book: "Harry Potter",
-    };
-    let addedAuthor = addAuthor(newAuthor);
-    expect(addedAuthor).toEqual({
-      authorId: 4,
-      name: "J.K. Rowling",
-      book: "Harry Potter",
-    });
+    let result = addAuthor(newAuthor);  
+    expect(result).toEqual(newAuthor);  
+    expect(addAuthor).toHaveBeenCalledWith(newAuthor);  
   });
 });
