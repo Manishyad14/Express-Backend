@@ -13,7 +13,7 @@ let server ;
 
 beforeAll(async ()=>{
    server = http.createServer(app);
-  server.listen(3001) ; 
+  server.listen(0) ; 
 });
 
 afterAll(async ()=>{
@@ -92,19 +92,20 @@ describe("API endpoint tests",()=>{
      
    });
 
-   it("GET /employees/details/:id should get employee details by id",async()=>{
-     const res = await request(app).get("/employees/details/1");
-     expect(res.status).toBe(200);
-     expect(res.body).toEqual({
-       emplyee : {
-         employeeId: 1,
-         name: "Rahul Sharma",
-         email: "rahul.sharma@example.com",
-         departmentId: 1,
-         roleId: 1,
-       },
-     });
-   });
+  it("GET /employees/details/:id should get employee details by id", async () => {
+    const res = await request(app).get("/employees/details/1");
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({
+      employee: { 
+        employeeId: 1,
+        name: "Rahul Sharma",
+        email: "rahul.sharma@example.com",
+        departmentId: 1,
+        roleId: 1,
+      },
+    });
+  });
+
  
   
 });
